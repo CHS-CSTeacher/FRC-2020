@@ -17,6 +17,8 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
+import java.util.HashMap;
+
 public class Robot extends TimedRobot {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
@@ -29,16 +31,19 @@ public class Robot extends TimedRobot {
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-  private static Relay spikeTest = new Relay(0); //On PWM channel 0
+  private final HashMap<Color, String> colors;
+
+  //private static Relay spikeTest = new Relay(0); //On PWM channel 0
 
   @Override
   public void robotInit() {
-    m_colorMatcher.addColorMatch(kBlueTarget);
-    m_colorMatcher.addColorMatch(kGreenTarget);
-    m_colorMatcher.addColorMatch(kRedTarget);
-    m_colorMatcher.addColorMatch(kYellowTarget);    
-
-    spikeTest.set(Relay.Value.kOff);
+    for (Color c : colors.keys())
+    {
+      m_colorMatcher.addColorMatch(kBlueTarget);
+      m_colorMatcher.addColorMatch(kGreenTarget);
+      m_colorMatcher.addColorMatch(kRedTarget);
+      m_colorMatcher.addColorMatch(kYellowTarget);
+    }
   }
 
   @Override
@@ -48,22 +53,25 @@ public class Robot extends TimedRobot {
     String colorString;
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-    if (match.color == kBlueTarget) {
+    if (match.color == kBlueTarget)
+    {
       colorString = "Blue";
-    } else if (match.color == kRedTarget) {
-      colorString = "Red";
-    } else if (match.color == kGreenTarget) {
-      colorString = "Green";
-    } else if (match.color == kYellowTarget) {
-      colorString = "Yellow";
-    } else {
-      colorString = "Unknown";
     }
-
-    if(match.color == kRedTarget) {
-      spikeTest.set(Relay.Value.kOn);
-    } else {
-      spikeTest.set(Relay.Value.kOff);
+    else if (match.color == kRedTarget)
+    {
+      colorString = "Red";
+    }
+    else if (match.color == kGreenTarget)
+    {
+      colorString = "Green";
+    }
+    else if (match.color == kYellowTarget)
+    {
+      colorString = "Yellow";
+    }
+    else
+    {
+      colorString = "Unknown";
     }
 
     SmartDashboard.putNumber("Red", detectedColor.red);
@@ -71,8 +79,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
     SmartDashboard.putString("Detected Color", colorString);
-
-
   }
   
   @Override
