@@ -40,28 +40,42 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    /*
+    Wheel Mapping: The wheel is divided into 8 wedges, clockwise pattern is red, yellow, blue, green
+    The game sensor is on the outer right edge of the wheel, the easiest way of determining the current
+    game color state (what the field is reading as our color) is to line up the robot on the CENTER
+    closest to our side. This way we will be skipping one wedge from the game sensor.
+    red<-->blue
+    green<-->yellow
+    */
     Color detectedColor = m_colorSensor.getColor();
-
-    String colorString;
+    
+    String colorDetected; //stores color sensed by the sensor (current robot position)
+    String gameColor; //stores current color detected by the game field
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-
+    
     if (match.color == kBlueTarget) {
-      colorString = "Blue";
+      colorDetected = "Blue";
+      gameColor = "Red";
     } else if (match.color == kRedTarget) {
-      colorString = "Red";
+      colorDetected = "Red";
+      gameColor = "Blue";
     } else if (match.color == kGreenTarget) {
-      colorString = "Green";
+      colorDetected = "Green";
+      gameColor = "Yellow";
     } else if (match.color == kYellowTarget) {
-      colorString = "Yellow";
+      colorDetected = "Yellow";
+      gameColor = "Green";
     } else {
-      colorString = "Unknown";
+      colorDetected = "Unknown";
     }
 
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
+    SmartDashboard.putString("Detected Color", colorDetected);
+    SmartDashboard.putString("Game/Field Color", gameColor);
   }
 
   @Override
