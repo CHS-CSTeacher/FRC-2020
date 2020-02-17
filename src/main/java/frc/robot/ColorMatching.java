@@ -50,6 +50,6 @@ class ColorMatching
 
     public enum ColorResult
     {
-        Red, Yellow, Green, Blue, Unknown
+        Blue, Green, Red, Yellow, Unknown
     }
 }

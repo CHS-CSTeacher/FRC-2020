@@ -13,14 +13,18 @@ class Controller {
 
     public Point getMotion()
     {
-        return new Point(stick.getX(Hand.kLeft), stick.getX(Hand.kRight));
+        return new Point(stick.getRawAxis(1), stick.getRawAxis(3));
     }
 
     public boolean getButton(int button)
     {
         return stick.getRawButtonPressed(button);
     }
-
+    
+    public boolean getRawButton(int button)
+    {
+        return stick.getRawButton(button);
+    }
     /**
      * Returns a value between -1 and 1, with 1 being up and -1 being down.
      */
