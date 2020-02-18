@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     if (controller.getButton(3)) {
       wheelIsSpinning = !wheelIsSpinning;
     }
-    if (wheelIsSpinning) {
+    if (wheelIsSpinning && !result.name().equals(SmartDashboard.getData("colorInput"))) {
       wheel.set(ControlMode.PercentOutput, .75);
     }
     else {
